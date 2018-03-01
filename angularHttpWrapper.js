@@ -74,7 +74,7 @@ function angularHttpWrapper($http){
         }, 
 
         /**
-         * HTTP Get Request Method. 
+         * HTTP GET Request Method. 
          * 
          * Will return a single object from the response 
          * 
@@ -114,7 +114,7 @@ function angularHttpWrapper($http){
         }, 
 
         /**
-         * HTTP Get Request Method. 
+         * HTTP GET Request Method. 
          * 
          * Will return a list of objects from the response 
          * 
@@ -127,7 +127,7 @@ function angularHttpWrapper($http){
                 endpoint = this.mergeUrlBaseAndEnpoint(endpoint);
             }
 
-            return new Promise(function getPromise(resolve, reject){
+            return new Promise(function listPromise(resolve, reject){
                 $http.get(endpoint)
                 .then(function success(response){
                     
@@ -143,7 +143,33 @@ function angularHttpWrapper($http){
                     reject(response);
                 });
             });
-        }
+        }, 
+
+        /**
+         * HTTP POST Request Method. 
+         * 
+         * Creates a resource at specified endpoint and returns created resource to user 
+         * 
+         * @param endpoint, String, the url endpoint you wish to request
+         * @param payload, Object, the resource you wish to create 
+         * @param ignoreUrlBase, Bool, if true it will not append {Object}.urlBase to beginning of endpoint
+         */
+        post : function post(endpoint, payload, ignoreUrlBase){
+            if(!ignoreUrlBase){
+                endpoint = this.mergeUrlBaseAndEnpoint(endpoint);
+            }
+
+            return new Promise(function postPromise(resolve, reject){
+                $http.post(endpoint, payload)
+                .then(function success(response){
+                    resolve(response.data);
+                }, function fail(response){
+                    reject(response);
+                });
+            });
+        }, 
+
+       
     };
 
     return angularHttpWrapper; 
