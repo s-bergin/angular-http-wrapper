@@ -108,7 +108,39 @@ function angularHttpWrapper($http){
                     }
                     
                 }, function fail(response){
-                    resolve(response);
+                    reject(response);
+                });
+            });
+        }, 
+
+        /**
+         * HTTP Get Request Method. 
+         * 
+         * Will return a list of objects from the response 
+         * 
+         * @param endpoint, String, the url endpoint you wish to request
+         * @param ignoreUrlBase, Bool, if true it will not append {Object}.urlBase to beginning of endpoint
+         */
+        list : function list(endpoint, ignoreUrlBase){
+            
+            if(!ignoreUrlBase){
+                endpoint = this.mergeUrlBaseAndEnpoint(endpoint);
+            }
+
+            return new Promise(function getPromise(resolve, reject){
+                $http.get(endpoint)
+                .then(function success(response){
+                    
+                    // check if type of response is array 
+                    if(response.data.constructor === Array){
+                        resolve(response.data);
+                    }else{
+                        // return our response data as an array
+                        resolve([response.data]);
+                    }
+                    
+                }, function fail(response){
+                    reject(response);
                 });
             });
         }
