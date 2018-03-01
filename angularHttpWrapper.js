@@ -20,7 +20,7 @@ function angularHttpWrapper($http){
         authToken : null,  
         
         /**
-         * Initialise some of the service's properties
+         * Initialise some of the service's properties and functionality 
          * @param urlBase, String
          * @param authTokenKey, String
          * @param authToken, String 
@@ -29,6 +29,7 @@ function angularHttpWrapper($http){
             this.setUrlBase(urlBase);
             this.setAuthTokenKey(authTokenKey); 
             this.setAuthToken(authToken); 
+            this.setAuthTokenInRequestHeader(); 
         }, 
 
         /**
@@ -53,6 +54,13 @@ function angularHttpWrapper($http){
          */
         setAuthToken : function setAuthToken(authToken){
             this.authToken = authToken; 
+        },
+
+        /**
+         * Assign authToken to authTokenKey in our HTTP request headers 
+         */
+        setAuthTokenInRequestHeader : function setAuthTokenInRequestHeader(){
+            $http.defaults.headers.common[this.authTokenKey] = this.authToken; 
         }
     };
 
