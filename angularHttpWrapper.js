@@ -232,7 +232,7 @@ function angularHttpWrapper($http){
                 endpoint += "/" + payload[this.idKey]; 
 
                 return new Promise(function savePutPromise(resolve, reject){
-                    that.put(endpoint, payload)
+                    that.put(endpoint, payload, ignoreUrlBase)
                     .then(function savePutPromiseResolve(response){
                         resolve(response);
                     }).catch(function saveePutPromiseReject(response){
@@ -243,7 +243,7 @@ function angularHttpWrapper($http){
                 // POST if id not present in payload
 
                 return new Promise(function savePostPromise(resolve, reject){
-                    that.post(endpoint, payload)
+                    that.post(endpoint, payload, ignoreUrlBase)
                     .then(function savePostPromiseResolve(response){
                         resolve(response);
                     }).catch(function savePostPromiseReject(response){
