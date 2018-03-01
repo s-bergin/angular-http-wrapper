@@ -240,10 +240,15 @@ function angularHttpWrapper($http){
                     });     
                 })
             }else{
-                console.log("I will post some day ...");
+                // POST if id not present in payload
 
-                return Promise.resolve(function(resolve, reject){
-                    resolve(true);
+                return new Promise(function savePostPromise(resolve, reject){
+                    that.post(endpoint, payload)
+                    .then(function savePostPromiseResolve(response){
+                        resolve(response);
+                    }).catch(function savePostPromiseReject(response){
+                        reject(response);
+                    });
                 });
             }
         }
