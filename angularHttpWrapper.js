@@ -80,7 +80,7 @@ function angularHttpWrapper($http){
          * 
          * TODO - Flesh out this functions functionality by including checks for '/' between urlBase and endpoint 
          */
-        mergeUrlBaseAndEnpoint(endpoint){
+        mergeUrlBaseAndEndpoint = function mergeUrlBaseAndEnpoint(endpoint){
             return this.urlBase + endpoint; 
         }, 
 
