@@ -2,7 +2,7 @@
  * A lightweight wrapper for angular's $http service. 
  * 
  * This function can be used as an angular factory / service. It provides htttp functionality 
- * through JS Promises and Callbacks. 
+ * through JS Promises. 
  */
 function angularHttpWrapper($http){
     
@@ -45,7 +45,7 @@ function angularHttpWrapper($http){
          * @param authToken, String  
          */
         setAuthTokenKey : function setAuthTokenKey(authTokenKey){
-            this.authToken = authToken; 
+            this.authTokenKey = authTokenKey; 
         },
 
         /**
@@ -61,6 +61,56 @@ function angularHttpWrapper($http){
          */
         setAuthTokenInRequestHeader : function setAuthTokenInRequestHeader(){
             $http.defaults.headers.common[this.authTokenKey] = this.authToken; 
+        }, 
+
+        /**
+         * Merges provided endpoint with the urlBase thats been initialised 
+         * @param endpoint, String the endpoint of a request 
+         * 
+         * TODO - Flesh out this functions functionality by including checks for '/' between urlBase and endpoint 
+         */
+        mergeUrlBaseAndEnpoint(endpoint){
+            return this.urlBase + endpoint; 
+        }, 
+
+        /**
+         * HTTP Get Request Method. 
+         * 
+         * Will return a single object from the response 
+         * 
+         * @param endpoint, String, the url endpoint you wish to request
+         * @param ignoreUrlBase, Bool, if true it will not append {Object}.urlBase to beginning of endpoint
+         */
+        get : function get(endpoint, ignoreUrlBase = false){
+
+            if(!ignoreUrlBase){
+                endpoint = this.mergeUrlBaseAndEnpoint(endpoint);
+            }
+
+            return new Promise(function getPromise(resolve, reject){
+                $http.get(endpoint)
+                .then(function success(response){
+                    
+                    // check if type of response is array 
+                    if(response.data.constructor === Array){
+                        
+                        // we only want to return one object with our get 
+                        if(response.data.length > 0){
+                            resolve(response.data[0]);
+                        }else{
+                            // FIXME - Is this the functionality you want to go with in case of nothing returned?  
+                            resolve(null);
+                        }
+                    }else{
+
+                        // return our object 
+                        resolve(response.data);
+                    }
+                    
+                }, function fail(response){
+                    resolve(response);
+                });
+            });
         }
     };
 
