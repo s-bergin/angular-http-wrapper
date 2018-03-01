@@ -169,7 +169,29 @@ function angularHttpWrapper($http){
             });
         }, 
 
-       
+        /**
+         * HTTP PUT Request Method. 
+         * 
+         * Creates a resource at specified endpoint and returns created resource to user 
+         * 
+         * @param endpoint, String, the url endpoint you wish to request
+         * @param payload, Object, the resource you wish to update 
+         * @param ignoreUrlBase, Bool, if true it will not append {Object}.urlBase to beginning of endpoint
+         */
+        put : function put(endpoint, payload, ignoreUrlBase){
+            if(!ignoreUrlBase){
+                endpoint = this.mergeUrlBaseAndEnpoint(endpoint);
+            }
+
+            return new Promise(function putPromise(resolve, reject){
+                $http.put(endpoint, payload)
+                .then(function success(response){
+                    resolve(response.data);
+                }, function fail(response){
+                    reject(response);
+                });
+            });
+        }
     };
 
     return angularHttpWrapper; 
