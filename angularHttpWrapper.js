@@ -29,6 +29,7 @@ function angularHttpWrapper($http){
          */
         init : function init(urlBase, idKey, authTokenKey, authToken){ 
             this.setUrlBase(urlBase);
+            this.setIdKey(idKey);
             this.setAuthTokenKey(authTokenKey); 
             this.setAuthToken(authToken); 
             this.setAuthTokenInRequestHeader(); 
@@ -203,6 +204,49 @@ function angularHttpWrapper($http){
             });
         }, 
         
+        /**
+         * HTTP POST / PUT Methods
+         * 
+         * save will search for {Object}.idKey presence in payload. If an id is present in the payload 
+         * the put request method will be used, and the indicated resource will be updated with the data in 
+         * the payload provided. If no id can be found in the payload the post method will be used,
+         * and a new resource with the payload provided will be created. 
+         * 
+         * @param endpoint, String, the url endpoint you wish to request
+         * @param payload, Object, the resource you wish to update 
+         * @param ignoreUrlBase, Bool, if true it will not append {Object}.urlBase to beginning of endpoint
+         */
+        save : function save(endpoint, payload, ignoreUrlBase){
+
+            /**
+             * We need to save the context of this wrapper so that we 
+             * can access the wrappers functions from within a Promise scope 
+             */
+            const that = this;
+
+            // check for the presence of an ID in payload and return the relevant response 
+            if(this.idKey in payload){
+                // PUT if id is present in payload
+
+                // append the id of the resource we wish to update 
+                endpoint += "/" + payload[this.idKey]; 
+
+                return new Promise(function savePutPromise(resolve, reject){
+                    that.put(endpoint, payload)
+                    .then(function savePutPromiseResolve(response){
+                        resolve(response);
+                    }).catch(function saveePutPromiseReject(response){
+                        reject(response);
+                    });     
+                })
+            }else{
+                console.log("I will post some day ...");
+
+                return Promise.resolve(function(resolve, reject){
+                    resolve(true);
+                });
+            }
+        }
     };
 
     return angularHttpWrapper; 
