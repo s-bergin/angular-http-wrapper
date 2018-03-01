@@ -16,16 +16,18 @@ function angularHttpWrapper($http){
     var angularHttpWrapper = {
         
         urlBase : null,
+        idKey : null, 
         authTokenKey : null, 
         authToken : null,  
         
         /**
          * Initialise some of the service's properties and functionality 
          * @param urlBase, String
+         * @param idKey, String, the Column Name of your Primary Key ID in Resource Model 
          * @param authTokenKey, String
          * @param authToken, String 
          */
-        init : function init(urlBase, authTokenKey, authToken){ 
+        init : function init(urlBase, idKey, authTokenKey, authToken){ 
             this.setUrlBase(urlBase);
             this.setAuthTokenKey(authTokenKey); 
             this.setAuthToken(authToken); 
@@ -39,6 +41,14 @@ function angularHttpWrapper($http){
         setUrlBase : function setUrlBase(urlBase){
             this.urlBase = urlBase; 
         },
+
+        /**
+         * Set the idKey Primary Key identifier for this service
+         * @param idKey, String
+         */
+        setIdKey : function setIdKey(idKey){
+            this.idKey = idKey; 
+        }, 
 
         /**
          * Set the authToken for this service 
@@ -191,7 +201,8 @@ function angularHttpWrapper($http){
                     reject(response);
                 });
             });
-        }
+        }, 
+        
     };
 
     return angularHttpWrapper; 
